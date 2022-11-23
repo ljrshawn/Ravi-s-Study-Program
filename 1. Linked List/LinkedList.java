@@ -5,10 +5,6 @@ public class LinkedList {
         this.head = null;
     }
 
-    public LinkedList(Node node) {
-        this.head = node;
-    }
-
     public void add(Node node) {
         if (this.head == null) {
             this.head = node;
