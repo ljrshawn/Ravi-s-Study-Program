@@ -1,14 +1,11 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class Bfs {
-    private final LinkedList<ArrayList<Integer>> map;
+    private final LinkedList<ArrayList<Integer>> graph;
     private final LinkedList<Integer> path;
 
     Bfs() {
-        this.map = new LinkedList<>();
+        this.graph = new LinkedList<>();
         this.path = new LinkedList<>();
     }
 
@@ -20,56 +17,50 @@ public class Bfs {
                     link.add(j);
                 }
             }
-            this.map.add(link);
+            this.graph.add(link);
         }
     }
 
     public void implement(int destination, int[][] matrix) {
         read(matrix);
 
-        Stack<Integer> finished = new Stack<>();
+        int n = this.graph.size();
+        boolean[] finished = new boolean[n];
+        Arrays.fill(finished, false);
+
         Queue<Integer> active = new LinkedList<>();
-        LinkedList<ArrayList<Integer>> parents = new LinkedList<>();
+        int[] parents = new int[n];
+        Arrays.fill(parents, -1);
 
         if (destination != 0) {
-            ArrayList<Integer> parent = new ArrayList<>();
-            for (int i : this.map.get(0)) {
+            for (int i : this.graph.get(0)) {
                 active.add(i);
-                parent.add(i);
+                parents[i] = 0;
             }
-            if (parent.contains(destination)){
+            if (parents[destination] == 0){
                 this.path.push(destination);
                 this.path.push(0);
             } else {
-                finished.push(0);
-                parents.add(parent);
+                finished[0] = true;
 
                 while (!active.isEmpty()) {
                     int d = active.poll();
-                    System.out.println(d);
+//                    System.out.println(d);
 
-                    parent = new ArrayList<>();
-                    for (int i : this.map.get(d)) {
-                        if (!active.contains(i) && !finished.contains(i)){
+                    for (int i : this.graph.get(d)) {
+                        if (!active.contains(i) && !finished[i]){
                             active.add(i);
-                            parent.add(i);
+                            parents[i] = d;
                         }
                     }
-                    finished.push(d);
-                    parents.add(parent);
-                    if (parent.contains(destination)){
+                    finished[d] = true;
+                    if (parents[destination] != -1){
                         this.path.push(destination);
-                        this.path.push(d);
-                        while (d != 0) {
-                            for (int i = 0; i < parents.size(); i++) {
-                                if (parents.get(i).contains(d)) {
-                                    d = finished.get(i);
-                                    this.path.push(d);
-                                    active.clear();
-                                    break;
-                                }
-                            }
+                        while (d != -1) {
+                            this.path.push(d);
+                            d = parents[d];
                         }
+                        break;
                     }
                 }
             }
@@ -95,12 +86,12 @@ class Main{
                 {0, 1, 0, 1, 1, 0, 0, 0},
                 {0, 0, 1, 0, 1, 0, 0, 0},
                 {0, 1, 1, 1, 0, 1, 0, 0},
-                {0, 0, 0, 0, 1, 0, 0, 0},
-                {1, 1, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 1, 0},
+                {1, 1, 0, 0, 0, 1, 0, 0},
                 {1, 0, 0, 0, 0, 0, 0, 0}};
         Bfs run = new Bfs();
 
-        run.implement(3, matrix);
+        run.implement(2, matrix);
         run.display();
     }
 }
