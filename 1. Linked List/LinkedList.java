@@ -8,31 +8,51 @@ public class LinkedList {
     public void add(Node node) {
         if (this.head == null) {
             this.head = node;
-        } else {
-            Node tem = this.head;
-            while (tem.getNext() != null) {
-                tem = tem.getNext();
-            }
-            tem.setNext(node);
+            return;
         }
+        Node tem = this.head;
+        while (tem.getNext() != null) {
+            tem = tem.getNext();
+        }
+        tem.setNext(node);
     }
 
     public void delete(int value) {
         if (this.head == null) {
             return;
-        } else {
-            if (this.head.getValue() == value) {
-                this.head = this.head.getNext();
-            } else {
-                Node tem = this.head;
-                while (tem.getNext() != null && tem.getNext().getValue() != value) {
-                    tem = tem.getNext();
-                }
-                if (tem.getNext() != null) {
-                    tem.setNext(tem.getNext().getNext());
-                }
-            }
         }
+        if (this.head.getValue() == value) {
+            this.head = this.head.getNext();
+            System.out.printf("Delete %s\n", value);
+        } else {
+            Node tem = this.head;
+            while (tem.getNext() != null && tem.getNext().getValue() != value) {
+                tem = tem.getNext();
+            }
+            if (tem.getNext() != null) {
+                tem.setNext(tem.getNext().getNext());
+                System.out.printf("Delete %s\n", value);
+                return;
+            }
+            System.out.printf("Don't have %s\n", value);
+        }
+
+    }
+
+    public void search(int value) {
+        if (this.head == null) {
+            System.out.println("Empty");
+            return;
+        }
+        Node tem = this.head;
+        while (tem.getNext() != null && tem.getNext().getValue() != value) {
+            tem = tem.getNext();
+        }
+        if (tem.getNext() != null) {
+            System.out.println("Find it");
+            return;
+        }
+        System.out.println("Didn't find");
     }
 
     public void print() {
@@ -41,6 +61,7 @@ public class LinkedList {
             System.out.print(tem.getValue() + " ");
             tem = tem.getNext();
         }
+        System.out.println();
     }
 }
 
@@ -83,6 +104,12 @@ class Main{
         list.add(new Node(11));
         list.add(new Node(12));
         list.add(new Node(13));
+        list.print();
+        list.search(6);
+        list.delete(6);
+        list.delete(4);
+        list.delete(6);
+        list.search(6);
         list.print();
     }
 }
