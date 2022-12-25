@@ -10,46 +10,80 @@ public class BinaryTree {
             this.root = new Node(value);
         } else {
             Node tem = this.root;
-            while (tem != null) {
+            while (true) {
                 if (tem.value < value) {
                     if (tem.right == null) {
                         tem.right = new Node(value);
-                        tem = null;
+                        break;
                     } else {
                         tem = tem.right;
                     }
                 } else if (tem.value > value) {
                     if (tem.left == null) {
                         tem.left = new Node(value);
-                        tem = null;
+                        break;
                     } else {
                         tem = tem.left;
                     }
+                } else {
+                    break;
                 }
             }
         }
     }
 
-    private void displayNode(Node node) {
-        if (node.left == null && node.right == null) {
-            System.out.print(node.value + " ");
-        } else {
-            if (node.left != null){
-                displayNode(node.left);
-            }
-            System.out.print(node.value + " ");
-            if (node.left != null) {
-                displayNode(node.right);
+    public void delete(int value) {
+        if (this.root == null) {
+            return;
+        }
+        if (this.root.value == value) {
+            if (this.root.left == null) {
+                this.root = this.root.right;
+            } else if (this.root.right == null) {
+                this.root = this.root.left;
+            } else {
+                Node tem = this.root.left;
+                Node par = tem;
+                while (tem.right != null) {
+                    par = tem;
+                    tem = tem.right;
+                }
+                this.root.value = tem.value;
+                par.right = tem.left;
             }
         }
     }
 
-    public void display() {
-        Node tem = this.root;
-        if (tem != null){
-            displayNode(tem);
+    public void search(int value) {
+        if (this.root == null) {
+            System.out.println("Empty");
+            return;
         }
-        System.out.print("\n");
+        Node tem = this.root;
+        while (tem != null) {
+            if (tem.value == value) {
+                System.out.println("Find it");
+                return;
+            }
+            if (tem.value > value) {
+                tem = tem.left;
+                continue;
+            }
+            tem = tem.right;
+        }
+        System.out.println("Didn't find");
+    }
+
+    private void displayNode(Node node) {
+        if (node != null) {
+            System.out.print(node.value + " ");
+            displayNode(node.left);
+            displayNode(node.right);
+        }
+    }
+    public void display() {
+        displayNode(this.root);
+        System.out.println();
     }
 }
 
@@ -73,5 +107,8 @@ class Main{
         binaryTree.insert(1);
         binaryTree.insert(3);
         binaryTree.display();
+        binaryTree.delete(4);
+        binaryTree.display();
+        binaryTree.search(4);
     }
 }
