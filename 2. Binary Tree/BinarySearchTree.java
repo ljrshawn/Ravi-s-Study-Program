@@ -1,7 +1,7 @@
-public class BinaryTree {
+public class BinarySearchTree {
     protected Node root;
 
-    BinaryTree() {
+    BinarySearchTree() {
         this.root = null;
     }
 
@@ -32,26 +32,43 @@ public class BinaryTree {
         }
     }
 
-    public void delete(int value) {
-        if (this.root == null) {
-            return;
-        }
-        if (this.root.value == value) {
-            if (this.root.left == null) {
-                this.root = this.root.right;
-            } else if (this.root.right == null) {
-                this.root = this.root.left;
+    public Node deleteIm(Node node, int value) {
+        if (node.value == value) {
+            if (node.left == null) {
+                node = node.right;
+            } else if (node.right == null) {
+                node = node.left;
             } else {
-                Node tem = this.root.left;
+                Node tem = node.left;
                 Node par = tem;
                 while (tem.right != null) {
                     par = tem;
                     tem = tem.right;
                 }
-                this.root.value = tem.value;
+                deleteIm(node, tem.value);
+                node.value = tem.value;
                 par.right = tem.left;
             }
+        } else if (node.value > value) {
+            if (node.left.value == value) {
+                node.left = deleteIm(node.left, value);
+            }
+            else deleteIm(node.left, value);
         }
+        else {
+            if (node.right.value == value) {
+                node.right = deleteIm(node.right, value);
+            }
+            else deleteIm(node.right, value);
+        }
+        return node;
+    }
+
+    public void delete(int value) {
+        if (this.root == null) {
+            return;
+        }
+        deleteIm(this.root, value);
     }
 
     public void search(int value) {
@@ -74,6 +91,7 @@ public class BinaryTree {
         System.out.println("Didn't find");
     }
 
+    // Preorder
     private void displayNode(Node node) {
         if (node != null) {
             System.out.print(node.value + " ");
@@ -100,15 +118,20 @@ class Node{
 }
 class Main{
     public static void main(String[] args) {
-        BinaryTree binaryTree = new BinaryTree();
-        binaryTree.insert(4);
+        BinarySearchTree binaryTree = new BinarySearchTree();
+        binaryTree.insert(17);
+        binaryTree.insert(7);
+        binaryTree.insert(19);
+        binaryTree.insert(3);
+        binaryTree.insert(13);
+        binaryTree.insert(18);
+        binaryTree.insert(22);
         binaryTree.insert(2);
         binaryTree.insert(5);
-        binaryTree.insert(1);
-        binaryTree.insert(3);
+        binaryTree.insert(11);
         binaryTree.display();
-        binaryTree.delete(4);
+        binaryTree.delete(17);
         binaryTree.display();
-        binaryTree.search(4);
+        binaryTree.search(13);
     }
 }
