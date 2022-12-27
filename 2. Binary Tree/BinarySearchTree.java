@@ -129,8 +129,10 @@ class Main{
         binaryTree.insert(2);
         binaryTree.insert(5);
         binaryTree.insert(11);
+        binaryTree.insert(14);
+        binaryTree.insert(12);
         binaryTree.display();
-        binaryTree.delete(17);
+        binaryTree.delete(22);
         binaryTree.display();
         binaryTree.search(13);
     }
